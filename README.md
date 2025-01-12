@@ -1,5 +1,6 @@
 # FakeRank
 The university needs a software to test their students’ coding skills by proposing programming exercises evaluated with automatic verification.
+![logo](https://github.com/user-attachments/assets/5503a8df-fbce-4a2d-b924-0d54ac48c766)
 
 ---
 
