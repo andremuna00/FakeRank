@@ -1,0 +1,67 @@
+.idea
+
+#----------backend_distributed----------
+backend_distributed/HELP.md
+backend_distributed/.gradle
+backend_distributed/build/
+!gradle/wrapper/gradle-wrapper.jar
+!backend_distributed/**/src/main/**/build/
+!backend_distributed/**/src/test/**/build/
+
+### STS ###
+backend_distributed/.apt_generated
+backend_distributed/.classpath
+backend_distributed/.factorypath
+backend_distributed/.project
+backend_distributed/.settings
+backend_distributed/.springBeans
+backend_distributed/.sts4-cache
+backend_distributed/bin/
+!backend_distributed/**/src/main/**/bin/
+!backend_distributed/**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+backend_distributed/.idea
+backend_distributed/*.iws
+backend_distributed/*.iml
+backend_distributed/*.ipr
+backend_distributed/out/
+backend_distributed/codemr
+!backend_distributed/**/src/main/**/out/
+!backend_distributed/**/src/test/**/out/
+
+### NetBeans ###
+backend_distributed/nbproject/private/
+backend_distributed/nbbuild/
+backend_distributed/dist/
+backend_distributed/nbdist/
+backend_distributed/.nb-gradle/
+backend_distributed/resources/application.properties
+
+### VS Code ###
+backend_distributed/.vscode/
+
+#----------FRONTEND----------
+# dependencies
+frontend/node_modules
+frontend/.pnp
+frontend/.pnp.js
+
+# testing
+frontend/coverage
+
+# production
+frontend/build
+
+# misc
+frontend/.DS_Store
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+frontend/.metals

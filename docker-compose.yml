@@ -1,0 +1,122 @@
+version: "2"
+
+x-logging: &default-logging
+    logging:
+        driver: json-file
+        options:
+            max-size: 100m
+
+services:
+    frontend:
+        build: ./frontend
+        ports:
+            - "3000:3000"
+        depends_on:
+            - "challenge"
+            - "codeexecution"
+            - "submission"
+            - "usermanagement"
+        environment:
+            - CHALLENGE_ADDRESS=challenge
+            - CODEEXECUTION_ADDRESS=codeexecution
+            - SUBMISSION_ADDRESS=submission
+            - USERMANAGEMENT_ADDRESS=usermanagement
+            - REACT_APP_AUTH0_DOMAIN=
+            - REACT_APP_AUTH0_CLIENT_ID=
+            - REACT_APP_AUTH0_AUDIENCE=http://backend/api
+            - REACT_APP_SERVER_URL=http://localhost:3000
+            - TZ=Europe/Berlin
+
+    challenge:
+        build: ./backend_distributed/challenge
+        ports:
+            - "8081:8081"
+        expose:
+            - "8081"
+        depends_on:
+            - "server"
+            - "workers"
+        environment:
+            - JUDGE0_ADDRESS=server
+            - TZ=Europe/Berlin
+
+    codeexecution:
+        build: ./backend_distributed/codeExecution
+        ports:
+            - "8082:8082"
+        expose:
+            - "8082"
+        depends_on:
+            - "server"
+            - "workers"
+        environment:
+            - JUDGE0_ADDRESS=server
+            - TZ=Europe/Berlin
+
+    submission:
+        build: ./backend_distributed/submission
+        ports:
+            - "8083:8083"
+        expose:
+            - "8083"
+        depends_on:
+            - "server"
+            - "workers"
+        environment:
+            - JUDGE0_ADDRESS=server
+            - TZ=Europe/Berlin
+
+    usermanagement:
+        build: ./backend_distributed/userManagement
+        ports:
+            - "8084:8084"
+        expose:
+            - "8084"
+        depends_on:
+            - "server"
+            - "workers"
+        environment:
+            - JUDGE0_ADDRESS=server
+            - TZ=Europe/Berlin
+
+    server:
+        image: judge0/judge0:1.13.0
+        volumes:
+            - ./judge0/judge0.conf:/judge0.conf:ro
+        ports:
+            - "2358:2358"
+        expose:
+            - "2358"
+        privileged: true
+        <<: *default-logging
+        #restart: always
+
+    workers:
+        image: judge0/judge0:1.13.0
+        command: ["./scripts/workers"]
+        volumes:
+            - ./judge0/judge0.conf:/judge0.conf:ro
+        privileged: true
+        <<: *default-logging
+        #restart: always
+
+    db:
+        image: postgres:13.0
+        env_file: judge0/judge0.conf
+        volumes:
+            - postgres-data:/var/lib/postgresql/data/
+        <<: *default-logging
+        #restart: always
+
+    redis:
+        image: redis:6.0
+        command: ["bash", "-c", 'docker-entrypoint.sh --appendonly yes --requirepass "$$REDIS_PASSWORD"']
+        env_file: judge0/judge0.conf
+        volumes:
+            - redis-data:/data
+        <<: *default-logging
+        #restart: always
+
+volumes:
+    postgres-data:
+    redis-data:
